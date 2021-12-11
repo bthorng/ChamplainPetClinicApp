@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters"
+             x:Class="ChamplainPetClinicApp.Views.VeterinarianProfilePage"
+             Title="{Binding Title}"
+             x:Name="MyVetProfilePage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SpecialtyListToStringConverter x:Key="specialtyListToString" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <RefreshView IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <StackLayout>
+                    <Frame Margin="10">
+                        <StackLayout>
+                            <Image Source="icon_profileimageplaceholder.png" HeightRequest="150"/>
+                            <Label LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="24">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0} {1}">
+                                        <Binding Path="FirstName" />
+                                        <Binding Path="LastName" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            <Label Text="{Binding Resume}"
+                                   LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="18"/>
+                            <Label Text="{Binding Specialties, Converter={StaticResource specialtyListToString}}"
+                                   LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="18"/>
+                            <Label Text="{Binding Workdays}"
+                                   LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="18"/>
+                            <Label Text="{Binding Email}"
+                                   LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="18"/>
+                            <Label Text="{Binding Telephone}"
+                                   LineBreakMode="TailTruncation"
+                                   HorizontalTextAlignment="Center"
+                                   FontSize="18"/>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
+    </ContentPage.Content>
+    
+</ContentPage>

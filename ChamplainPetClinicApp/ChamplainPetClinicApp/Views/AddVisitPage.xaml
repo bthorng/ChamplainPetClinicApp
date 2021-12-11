@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters" xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels" x:DataType="viewmodels:AddVisitPageViewModel"
+             x:Class="ChamplainPetClinicApp.Views.AddVisitPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisitStatusConverter x:Key="boolToVisitStatusConverter" />
+            <converters:BoolToInvertedBoolConverter x:Key="boolToInvertedBoolConverter" />
+            <converters:VetObjectToFullNameConverter x:Key="vetObjectToFullNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <Frame Margin="8">
+                <StackLayout Spacing="8">
+                    <Label Text="Visit Details" HorizontalOptions="Center" FontSize="30"/>
+
+                    <Label Text="Practitioner:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Picker ItemsSource="{Binding Veterinarians}"
+                                ItemDisplayBinding="{Binding Converter={StaticResource vetObjectToFullNameConverter}}"
+                                SelectedItem="{Binding SelectedVeterinarian}"
+                                Title="Please select an practitioner"/>
+                    </Frame>
+
+                    <Label Text="Date:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <DatePicker Date="{Binding Date}"
+                                    MinimumDate="{Binding MinimumDate}"/>
+                    </Frame>
+
+                    <Label Text="Description:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Entry Text="{Binding Description}" FontSize="Large" Placeholder="Please enter a description"/>
+                    </Frame>
+
+                    <Button Text="Create visit" Command="{Binding CreateVisitCommand}"/>
+                </StackLayout>
+            </Frame>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

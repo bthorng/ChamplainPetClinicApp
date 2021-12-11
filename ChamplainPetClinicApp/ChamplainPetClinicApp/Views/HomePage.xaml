@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ChamplainPetClinicApp.Views.HomePage"
+             Title="Home">
+    <ContentPage.Content>
+        <StackLayout Spacing="0" Background="petclinic_logo.png">
+            <Image Source="petclinic_logo.png"/>
+
+            <Frame BorderColor="LightGray" VerticalOptions="FillAndExpand" Padding="0">
+                <StackLayout Spacing="6" Padding="16">
+                    <StackLayout Orientation="Horizontal" Spacing="8" HorizontalOptions="Center" Margin="0,0,0,12">
+                        <Image Source="icon_activestatus.png" HeightRequest="35" VerticalOptions="Center"/>
+                        <Label Text="Login Successful!"
+                                FontSize="32"
+                                VerticalOptions="Center" HorizontalOptions="Start" />
+                    </StackLayout>
+
+                    <Label Text="Welcome Admin"
+                           HorizontalTextAlignment="Center"
+                           FontSize="Large"/>
+                    <Label Text="Please select the top left to get started!"
+                           HorizontalTextAlignment="Center"
+                           FontSize="Medium"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

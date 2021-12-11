@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ChamplainPetClinicApp.Views.LoginPage"
+             xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:LoginPageViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout Spacing="0" Background="petclinic_logo.png">
+            <Image Source="petclinic_logo.png"/>
+
+            <Frame BorderColor="LightGray" VerticalOptions="FillAndExpand" Padding="0">
+                <StackLayout>
+                    <StackLayout Spacing="6" Padding="32">
+                        <StackLayout Orientation="Horizontal" Spacing="8" HorizontalOptions="Center" Margin="0,0,0,12">
+                            <Image Source="icon_springlogo.png" HeightRequest="35" VerticalOptions="Start"/>
+                            <Label Text="Pet Clinic Admin"
+                                   FontSize="32"
+                                   VerticalOptions="Start" HorizontalOptions="Start" />
+                        </StackLayout>
+
+                        <Label Text="Email:"/>
+                        <Frame Padding="0"
+                               BorderColor="Gray"
+                               CornerRadius="8">
+                            <Entry Text="{Binding Email}" IsEnabled="{Binding InputsEnabled}" Keyboard="Email" Placeholder="example@mail.com" BackgroundColor="Transparent"/>
+                        </Frame>
+
+                        <Label Text="Password:"/>
+                        <Frame Padding="0"
+                               BorderColor="Gray"
+                               CornerRadius="8">
+                            <Entry Text="{Binding Password}" IsEnabled="{Binding InputsEnabled}" IsPassword="True" Placeholder="password"/>
+                        </Frame>
+
+                        <Button Text="Login" Command="{Binding AttemptLoginCommand}" IsEnabled="{Binding InputsEnabled}" Margin="0,10,0,0"/>
+                    </StackLayout>
+                    <Label Text="github.com/cgerard321/champlain_petclinic"
+                           FontSize="Small"
+                           TextColor="White"
+                           BackgroundColor="{StaticResource Primary}"
+                           VerticalOptions="EndAndExpand"
+                           HorizontalTextAlignment="Center"
+                           Padding="6"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

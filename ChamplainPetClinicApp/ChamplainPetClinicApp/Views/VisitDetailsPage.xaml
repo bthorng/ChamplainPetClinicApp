@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters"
+             x:Class="ChamplainPetClinicApp.Views.VisitDetailsPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisitStatusConverter x:Key="boolToVisitStatusConverter" />
+            <converters:BoolToInvertedBoolConverter x:Key="boolToInvertedBoolConverter" />
+            <converters:VetObjectToFullNameConverter x:Key="vetObjectToFullNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <Frame Margin="8">
+                <StackLayout Spacing="8">
+                    <Label Text="Visit Details" HorizontalOptions="Center" FontSize="30"/>
+
+                    <Label Text="Practitioner:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Picker ItemsSource="{Binding Veterinarians}" ItemDisplayBinding="{Binding Converter={StaticResource vetObjectToFullNameConverter}}"
+                                SelectedItem="{Binding SelectedVet}" SelectedIndex="{Binding PickerIndex}" IsEnabled="{Binding IsFormInEditMode}"/>
+                    </Frame>
+
+                    <Label Text="Date:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <DatePicker Date="{Binding Date}" IsEnabled="{Binding IsFormInEditMode}"/>
+                    </Frame>
+
+                    <Label Text="Description:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Entry Text="{Binding Description}" FontSize="Large" IsEnabled="{Binding IsFormInEditMode}"/>
+                    </Frame>
+
+                    <Label Text="Status:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Entry Text="{Binding Status, Converter={StaticResource boolToVisitStatusConverter}}" FontSize="Large" IsEnabled="False"/>
+                    </Frame>
+                    <Button Text="Edit" Command="{Binding SwitchToEditFormCommand}" IsVisible="{Binding IsFormInEditMode, Converter={StaticResource boolToInvertedBoolConverter}}"/>
+                    <Button Text="Save Changes" Command="{Binding SubmitUpdatedVisitCommand}" IsVisible="{Binding IsFormInEditMode}"/>
+                    <Button Text="Cancel" Command="{Binding CancelEditingVisitCommand}" IsVisible="{Binding IsFormInEditMode}"/>
+                </StackLayout>
+            </Frame>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

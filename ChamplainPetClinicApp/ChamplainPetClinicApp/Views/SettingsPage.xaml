@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels"
+             x:Class="ChamplainPetClinicApp.Views.SettingsPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:SettingsPageViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <StackLayout Orientation="Vertical" Spacing="24">
+                <StackLayout Spacing="0">
+                    <Image Source="icon_profileimageplaceholder.png"
+                           HeightRequest="150"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Admin"
+                           HorizontalOptions="Center"
+                           FontSize="Large"/>
+                    <Label Text="Administrator Account"
+                           HorizontalOptions="Center"
+                           FontSize="Small"/>
+                </StackLayout>
+
+                <StackLayout Spacing="0">
+                    <Frame BackgroundColor="{StaticResource Primary}" Padding="10">
+                        <Label Text="Preferences"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Center"
+                               TextColor="White"/>
+                    </Frame>
+                    <Frame Padding="10">
+                        <StackLayout Spacing="10" Orientation="Horizontal">
+                            <Image Source="icon_darkmode.png"
+                                   HeightRequest="25"
+                                   VerticalOptions="Center" />
+                            <Label Text="Dark Mode"
+                                   VerticalOptions="Center"
+                                   FontSize="Medium"/>
+                            <Switch VerticalOptions="Center"
+                                    HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

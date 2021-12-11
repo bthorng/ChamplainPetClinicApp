@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters"
+             x:Class="ChamplainPetClinicApp.Views.GenericAddVisitPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:GenericAddVisitPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:VetObjectToFullNameConverter x:Key="vetObjectToFullNameConverter" />
+            <converters:OwnerObjectToFullNameConverter x:Key="ownerObjectToFullNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <ScrollView>
+            <Frame Margin="8">
+                <StackLayout Spacing="8">
+                    <Label Text="Visit Details" HorizontalOptions="Center" FontSize="30"/>
+
+                    <Label Text="Owner:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Picker ItemsSource="{Binding Owners}"
+                                ItemDisplayBinding="{Binding Converter={StaticResource ownerObjectToFullNameConverter}}"
+                                SelectedItem="{Binding SelectedOwner}"
+                                Title="Please select an owner"/>
+                    </Frame>
+                    
+                    <Label Text="Pet:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Picker ItemsSource="{Binding Pets}"
+                                ItemDisplayBinding="{Binding Path=name}"
+                                SelectedItem="{Binding SelectedPet}"
+                                IsEnabled="{Binding PetsPickerPopulated}"
+                                Title="Please select an owner"/>
+                    </Frame>
+                    
+                    <Label Text="Practitioner:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Picker ItemsSource="{Binding Veterinarians}"
+                                ItemDisplayBinding="{Binding Converter={StaticResource vetObjectToFullNameConverter}}"
+                                SelectedItem="{Binding SelectedVeterinarian}"
+                                Title="Please select an practitioner"/>
+                    </Frame>
+
+                    <Label Text="Date:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <DatePicker Date="{Binding Date}"
+                                    MinimumDate="{Binding MinimumDate}"/>
+                    </Frame>
+
+                    <Label Text="Description:" FontSize="Large"/>
+                    <Frame Padding="4">
+                        <Entry Text="{Binding Description}" FontSize="Large" Placeholder="Please enter a description"/>
+                    </Frame>
+
+                    <Button Text="Create visit" Command="{Binding CreateVisitCommand}"/>
+                </StackLayout>
+            </Frame>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

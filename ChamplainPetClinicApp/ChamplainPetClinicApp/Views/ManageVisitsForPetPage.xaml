@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ChamplainPetClinicApp.Views.ManageVisitsForPetPage"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters"
+             xmlns:local="clr-namespace:ChamplainPetClinicApp.Services"
+             xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels"
+             x:DataType="viewmodels:ManageVisitsForPetPageViewModel"
+             Title="{Binding Title}"
+             x:Name="MyManageVisitsForPetPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisitStatusButtonActionConverter x:Key="boolToVisitStatusButtonActionConverter" />
+            <converters:BoolToStatusIconConverter x:Key="boolToStatusIconConverter" />
+        </ResourceDictionary>
+        
+        <DataTemplate x:Key="ScheduledVisits">
+            <RefreshView IsRefreshing="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=IsBusy}"
+                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=RefreshCommand}">
+                <ScrollView>
+                    <StackLayout>
+                        <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=ScheduledVisits}"
+                                        Margin="10"
+                                        SelectionMode="Single"
+                                        ItemSizingStrategy="MeasureAllItems"
+                                        SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=SelectedVisit, Mode=TwoWay}"
+                                        SelectionChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=ViewVisitDetailsCommand}">
+                            <CollectionView.EmptyView>
+                                <Label Text="No scheduled visits found" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                                        <SwipeView.RightItems>
+                                            <SwipeItem BackgroundColor="Orange"
+                                                       Command="{Binding Source={x:Reference MyManageVisitsForPetPage}, Path=BindingContext.UpdateVisitStatusCommand}"
+                                                       CommandParameter="{Binding .}"
+                                                       Text="{Binding status, Converter={StaticResource boolToVisitStatusButtonActionConverter}}"/>
+                                            <SwipeItem BackgroundColor="Red"
+                                                       Command="{Binding Source={x:Reference MyManageVisitsForPetPage}, Path=BindingContext.DeleteVisitCommand}"
+                                                       CommandParameter="{Binding .}"
+                                                       IsDestructive="True"
+                                                       Text="Delete"/>
+                                        </SwipeView.RightItems>
+                                        <Frame Padding="4" HorizontalOptions="FillAndExpand" BorderColor="LightGray">
+                                            <StackLayout Orientation="Horizontal" Spacing="15" Padding="10, 0, 10, 0">
+                                                <Label Text="{Binding date}" VerticalOptions="Center"/>
+                                                <Label Text=" - " VerticalOptions="Center"/>
+                                                <Label Text="{Binding description}" VerticalOptions="Center"/>
+                                                <Grid HorizontalOptions="EndAndExpand" Padding="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <Image Source="icon_about.png" HeightRequest="50"
+                                                           Grid.Row="0" Grid.Column="0"/>
+                                                    <Image Source="{Binding status, Converter={StaticResource boolToStatusIconConverter}}"
+                                                           HeightRequest="12"
+                                                           HorizontalOptions="End"
+                                                           VerticalOptions="End"
+                                                           Margin="0,0,0,8"
+                                                           Grid.Row="0" Grid.Column="0"/>
+                                                </Grid>
+                                            </StackLayout>
+                                        </Frame>
+                                    </SwipeView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                            <CollectionView.Header>
+                                <Frame BackgroundColor="{StaticResource Primary}" Padding="2" >
+                                    <StackLayout Orientation="Horizontal" Padding="4" HorizontalOptions="Center">
+                                        <Label Text="Upcoming Visits"
+                                                   FontSize="18"
+                                                   TextColor="White"/>
+                                    </StackLayout>
+                                </Frame>
+                            </CollectionView.Header>
+                        </CollectionView>
+                    </StackLayout>
+                </ScrollView>
+            </RefreshView>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PreviousVisits">
+            <RefreshView IsRefreshing="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=IsBusy}"
+                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=RefreshCommand}">
+                <ScrollView>
+                    <StackLayout>
+                        <CollectionView ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=PreviousVisits}"
+                                        Margin="10"
+                                        ItemSizingStrategy="MeasureAllItems"
+                                        SelectionMode="Single"
+                                        SelectedItem="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=SelectedVisit, Mode=TwoWay}"
+                                        SelectionChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageVisitsForPetPageViewModel}}, Path=ViewPastVisitDetailsCommand}">
+                            <CollectionView.EmptyView>
+                                <Label Text="No previous visits found" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                                        <SwipeView.RightItems>
+                                            <SwipeItem BackgroundColor="Red"
+                                                        Command="{Binding Source={x:Reference MyManageVisitsForPetPage}, Path=BindingContext.DeleteVisitCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        IsDestructive="True"
+                                                        Text="Delete"/>
+                                        </SwipeView.RightItems>
+                                        <Frame Padding="15" HorizontalOptions="FillAndExpand" BorderColor="LightGray">
+                                            <StackLayout Orientation="Horizontal" Spacing="15" Padding="10, 0, 10, 0">
+                                                <Label Text="{Binding date}" VerticalOptions="Center"/>
+                                                <Label Text=" - " VerticalOptions="Center"/>
+                                                <Label Text="{Binding description}" VerticalOptions="Center"/>
+                                            </StackLayout>
+                                        </Frame>
+                                    </SwipeView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                            <CollectionView.Header>
+                                <Frame BackgroundColor="{StaticResource Primary}" Padding="2" >
+                                    <StackLayout Orientation="Horizontal" Padding="4" HorizontalOptions="Center">
+                                        <Label Text="Previous Visits"
+                                                    FontSize="18"
+                                                    TextColor="White"/>
+                                    </StackLayout>
+                                </Frame>
+                            </CollectionView.Header>
+                        </CollectionView>
+                    </StackLayout>
+                </ScrollView>
+            </RefreshView>
+        </DataTemplate>
+
+        <local:PageDataTemplateSelector x:Key="pageDataTemplateSelector"
+                                        Page1="{StaticResource ScheduledVisits}"
+                                        Page2="{StaticResource PreviousVisits}"/>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackLayout Grid.Row="0"
+                            Grid.Column="0">
+                <CarouselView ItemTemplate="{StaticResource pageDataTemplateSelector}"
+                                ItemsSource="{Binding CarouselPages}"
+                                IndicatorView="{x:Reference PageIndicator}"
+                                Loop="False">
+                </CarouselView>
+                <IndicatorView x:Name="PageIndicator"
+                                HorizontalOptions="FillAndExpand"
+                                IndicatorsShape="Circle"
+                                IndicatorColor="LightGray"
+                                SelectedIndicatorColor="Gray"
+                                IndicatorSize="16"
+                                Margin="0,0,0,5">
+                </IndicatorView>
+            </StackLayout>
+            <ImageButton Source="icon_floatingaddbutton.png"
+                            HeightRequest="50"
+                            Margin="10"
+                            BackgroundColor="Transparent"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalOptions="EndAndExpand"
+                            VerticalOptions="End"
+                            Command="{Binding Source={x:Reference MyManageVisitsForPetPage}, Path=BindingContext.NavigateToAddVisitPageCommand}"/>
+        </Grid>
+    </ContentPage.Content>
+    
+</ContentPage>

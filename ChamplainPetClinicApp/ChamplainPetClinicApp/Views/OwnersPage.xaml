@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ChamplainPetClinicApp.Views.OwnersPage"
+             xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core" 
+             xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters"
+             Title="Owners"
+             x:Name="MyOwnersListPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringToTelephoneConverter x:Key="stringToTelephone" />
+            <converters:PetListToStringConverter x:Key="petListToString" />
+            <converters:BoolToAlphabeticalSortIcon x:Key="boolToAlphabeticalSortIcon" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="{Binding SortedAlphabeticallyDown, Converter={StaticResource boolToAlphabeticalSortIcon}}"
+                     Command="{Binding SortAlphabeticallyCommand}"
+                     Order="Primary"
+                     Priority="0"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <RefreshView IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Owners}"
+                            ItemSizingStrategy="MeasureAllItems">
+
+                <CollectionView.EmptyView>
+                    <Label Text="Could not find any owners." />
+                </CollectionView.EmptyView>
+            
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="4">
+                            <Frame Padding="8" HorizontalOptions="FillAndExpand">
+                                <toolkit:Expander>
+                                    <toolkit:Expander.Header>
+                                        <Grid HorizontalOptions="FillAndExpand">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="50"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="290"/>
+                                                <ColumnDefinition Width="25"/>
+                                            </Grid.ColumnDefinitions>
+                                        
+                                            <Image Source="icon_profileimageplaceholder.png"
+                                                   Grid.Row="0" Grid.Column="0"/>
+                                            <Label
+                                                   VerticalOptions="Center"
+                                                   FontSize="25"
+                                                   LineBreakMode="TailTruncation"
+                                                   Grid.Row="0" Grid.Column="1">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding Path="firstName" />
+                                                        <Binding Path="lastName" />
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+
+                                            <Image Source="icon_expand.png"
+                                                       HeightRequest="25"
+                                                       WidthRequest="25"
+                                                       HorizontalOptions="End"
+                                                       VerticalOptions="Center"
+                                                       Grid.Row="0" Grid.Column="2">
+                                                <Image.Triggers>
+                                                    <DataTrigger TargetType="Image"
+                                                                 Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, Path=IsExpanded}"
+                                                                 Value="True">
+                                                        <Setter Property="Source" Value="icon_collapse.png" />
+                                                    </DataTrigger>
+                                                </Image.Triggers>
+                                            </Image>
+                                        </Grid>
+                                    </toolkit:Expander.Header>
+                                    <toolkit:Expander.ContentTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="275"/>
+                                                    <ColumnDefinition Width="100"/>
+                                                </Grid.ColumnDefinitions>
+                                            
+                                                <StackLayout Padding="10"
+                                                             Grid.Row="0" Grid.Column="0">
+                                                    <Label Text="{Binding Path=telephone, Converter={StaticResource stringToTelephone}}"
+                                                           LineBreakMode="TailTruncation"/>
+                                                    <Label LineBreakMode="TailTruncation">
+                                                        <Label.Text>
+                                                            <MultiBinding StringFormat="{}{0}, {1}">
+                                                                <Binding Path="address" />
+                                                                <Binding Path="city" />
+                                                            </MultiBinding>
+                                                        </Label.Text>
+                                                    </Label>
+                                                    <Label Text="{Binding Path=pets, Converter={StaticResource petListToString}}"
+                                                           LineBreakMode="TailTruncation" />
+                                                </StackLayout>
+                                                <StackLayout Grid.Row="0" Grid.Column="1"
+                                                             VerticalOptions="Center">
+                                                    <Button Text="View Profile"
+                                                            Command="{Binding Source={x:Reference MyOwnersListPage} , Path=BindingContext.ViewOwnerProfileCommand}" CommandParameter="{Binding .}"/>
+                                                </StackLayout>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </toolkit:Expander.ContentTemplate>
+                                </toolkit:Expander>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            
+                <CollectionView.Header>
+                    <Frame BackgroundColor="{StaticResource Primary}" Padding="2" >
+                        <StackLayout Orientation="Horizontal" Padding="4" HorizontalOptions="Center">
+                            <Label Text="All Owners"
+                                   FontSize="18"
+                                   TextColor="White"/>
+                        </StackLayout>
+                    </Frame>
+                </CollectionView.Header>
+            
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ChamplainPetClinicApp.Views.VisitOverviewPage"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:converters="clr-namespace:ChamplainPetClinicApp.Services.Converters"
+             xmlns:local="clr-namespace:ChamplainPetClinicApp.Services"
+             xmlns:viewmodels="clr-namespace:ChamplainPetClinicApp.ViewModels"
+             x:Name="MyVisitOverviewPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisitStatusButtonActionConverter x:Key="boolToVisitStatusButtonActionConverter" />
+            <converters:BoolToStatusIconConverter x:Key="boolToStatusIconConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <RefreshView IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding RefreshCommand}">
+            <Grid>
+                <ScrollView Grid.Row="0" Grid.Column="0">
+                    <StackLayout>
+                        <CollectionView ItemsSource="{Binding AllVisits}"
+                                        Margin="10"
+                                        SelectionMode="Single"
+                                        ItemSizingStrategy="MeasureAllItems"
+                                        SelectedItem="{Binding SelectedVisit, Mode=TwoWay}"
+                                        SelectionChangedCommand="{Binding ViewVisitDetailsCommand}">
+                            <CollectionView.EmptyView>
+                                <Label Text="No scheduled visits found" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                                        <SwipeView.RightItems>
+                                            <SwipeItem BackgroundColor="Orange"
+                                                        Command="{Binding Source={x:Reference MyVisitOverviewPage}, Path=BindingContext.UpdateVisitStatusCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        Text="{Binding status, Converter={StaticResource boolToVisitStatusButtonActionConverter}}"/>
+                                            <SwipeItem BackgroundColor="Red"
+                                                       Command="{Binding Source={x:Reference MyVisitOverviewPage}, Path=BindingContext.DeleteVisitCommand}"
+                                                       CommandParameter="{Binding .}"
+                                                       IsDestructive="True"
+                                                       Text="Delete"/>
+                                        </SwipeView.RightItems>
+                                        <Frame Padding="4" HorizontalOptions="FillAndExpand" BorderColor="LightGray">
+                                            <StackLayout Orientation="Horizontal" Spacing="15" Padding="10, 0, 10, 0">
+                                                <Label Text="{Binding date}" VerticalOptions="Center"/>
+                                                <Label Text=" - " VerticalOptions="Center"/>
+                                                <Label Text="{Binding description}" VerticalOptions="Center"/>
+                                                <Grid HorizontalOptions="EndAndExpand" Padding="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <Image Source="icon_about.png" HeightRequest="50"
+                                                           Grid.Row="0" Grid.Column="0"/>
+                                                    <Image Source="{Binding status, Converter={StaticResource boolToStatusIconConverter}}"
+                                                           HeightRequest="12"
+                                                           HorizontalOptions="End"
+                                                           VerticalOptions="End"
+                                                           Margin="0,0,0,8"
+                                                           Grid.Row="0" Grid.Column="0"/>
+                                                </Grid>
+                                            </StackLayout>
+                                        </Frame>
+                                    </SwipeView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                            <CollectionView.Header>
+                                <Frame BackgroundColor="{StaticResource Primary}" Padding="2" >
+                                    <StackLayout Orientation="Horizontal" Padding="4" HorizontalOptions="Center">
+                                        <Label Text="All Upcoming Visits"
+                                               FontSize="18"
+                                               TextColor="White"/>
+                                    </StackLayout>
+                                </Frame>
+                            </CollectionView.Header>
+                        </CollectionView>
+                    </StackLayout>
+                </ScrollView>
+                
+                <ImageButton Source="icon_floatingaddbutton.png"
+                             HeightRequest="50"
+                             Margin="10"
+                             BackgroundColor="Transparent"
+                             Grid.Row="0"
+                             Grid.Column="0"
+                             HorizontalOptions="EndAndExpand"
+                             VerticalOptions="End"
+                             Command="{Binding NavigateToGenericAddVisitPageCommand}"/>
+            </Grid>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>
